@@ -1,0 +1,352 @@
+syntax = "proto3";
+
+// protobuf style guide :  https://developers.google.com/protocol-buffers/docs/style
+// google naming convention: https://cloud.google.com/apis/design/naming_convention
+
+// The Peakwork Accommodation API is used by accommodation suppliers like bed banks or hotel chains to provide their
+// accommodation portfolio to the Peakwork network for distribution to partner companies like tour operators.
+//
+// It is composed of two services:
+// - BaseDataService: methods to maintain basic entities like accommodations or rooms, shared among all distribution
+//   partners of a supplier.
+// - OfferDataService: methods to update offers, i.e. the price and availability information about the accommodation
+//   portfolio of a supplier. Offers can be shared among distribution partners of a supplier or specific for single
+//   partners.
+package peakwork.api.accommodation.v1;
+
+option java_package = "com.peakwork.api.accommodation.v1";
+option java_multiple_files = true;
+import "google/api/annotations.proto";
+import "google/rpc/status.proto";
+import "google/type/date.proto";
+import "basedata.proto";
+import "offerdata.proto";
+
+
+
+
+// The BaseDataService is used to send various base data, i.e. static meta information, about the accommodation
+// portfolio to Peakwork in order to distribute it. Base data contains various entities, like accommodations, rooms or
+// boards. These entities contain meta information, that is shared among all distribution partners. This means,
+// when a supplier sends base data for an accommodation, the distribution partners will all see the same base data.
+service BaseDataService {
+
+  // Creates a new accommodation entity for the supplier.
+  // If an accommodation with the same identity already exists, its content is replaced by the new data.
+  //
+  // See Accommodation for further information about the accommodation entity and how it is identified.
+  rpc UpsertAccommodation (AccommodationRequest) returns (google.rpc.Status) {
+    option (google.api.http) = {
+                put: "/basedata/accommodations"
+                body: "accommodation"
+            };
+  }
+
+  // Creates a new rate entity for the supplier.
+  // If a rate with the same identity already exists, its content is replaced by the new data.
+  //
+  // See Rate for further information about the rate entity and how it is identified.
+  rpc UpsertRate (RateRequest) returns (google.rpc.Status) {
+    option (google.api.http) = {
+                put: "/basedata/rates"
+                body: "rate"
+            };
+  }
+
+  // Creates a new room entity for the supplier.
+  // If a room with the same identity already exists, its content is replaced by the new data.
+  //
+  // See Room for further information about the room entity and how it is identified.
+  rpc UpsertRoom (RoomRequest) returns (google.rpc.Status) {
+    option (google.api.http) = {
+                put: "/basedata/rooms"
+                body: "room"
+            };
+  }
+
+  // Creates a new board entity for the supplier.
+  // If a board with the same identity already exists, its content is replaced by the new data.
+  //
+  // See Board for further information about the board entity and how it is identified.
+  rpc UpsertBoard (BoardRequest) returns (google.rpc.Status) {
+    option (google.api.http) = {
+                put: "/basedata/boards"
+                body: "board"
+            };
+  }
+}
+
+// The OfferDataService is used to send various offer information about the accommodation portfolio to Peakwork in
+// order to distribute it. Offers contain information about the pricing and availability of the portfolio and can be
+// shared by multiple partners or supplied specifically for single partners (as opposed to base data). This means,
+// that a supplier can send different offer data, e.g. prices, to be used by different partners, while all partners
+// share the same basic information about the portfolio.
+service OfferDataService {
+
+  // Creates offer data for a given combination of:
+  // - accommodation
+  // - rate
+  // for a supplier.
+  // If offer information for the given accommodation/rate combination already exists, all information is replaced by
+  // the new data. Offer data for the same accommodation but a different rate is not replaced. Analogously, offer data
+  // for the same rate but a different accommodation is also not replaced.
+  // This implicitly removes all previously existing offer data of the accommodation/rate combination, that are not
+  // delivered again in that call.
+  //
+  // UpsertAccommodationOfferData is the highest level on which to update offer data. It is meant for for the following
+  // scenarios:
+  // - a supplier wants to run an initial import of the portfolio offer data
+  // - a supplier's system produces updates of price information on an accommodation level
+  // - a supplier wants to reset the offer data of an accommodation
+  // - a supplier wants to remove offer data of an accommodation implicitly by explicitly delivering all available
+  //   offer data
+  //
+  // UpsertAccommodationOfferData is not intended for the following scenarios:
+  // - a single price/allotment has changed
+  // - a supplier's system produces updates of price information on a room or board level for an accommodation
+  // - a supplier's system produces updates of price information on arrival date or length of stay level
+  //
+  // See UpsertGroupOfferData and UpsertSingleOfferData for information on how to update offer data on lower levels
+  // without replacing all offer data for an accommodation/rate combination.
+  rpc UpsertAccommodationOfferData (AccommodationOfferDataDeliveryRequest) returns (google.rpc.Status) {
+    option (google.api.http) = {
+                put: "/offerdata/accommodation_offers"
+                body: "accommodations"
+            };
+  }
+
+  // Remark: This call is not yet fully supported!
+  //
+  // Creates offer data for a given combination of:
+  // - accommodation
+  // - rate
+  // - room
+  // - board
+  // for a supplier.
+  // If offer information for the given accommodation/rate/room/board combination already exists, all information is
+  // replaced by the new data. Offer data for the same combination but e.g. for a different room or board is not
+  // replaced.
+  // This implicitly removes all previously existing offer data of the accommodation/rate/room/board combination,
+  // that are not delivered again in the call.
+  //
+  // UpsertGroupOfferData is meant for for the following scenarios:
+  // - a supplier wants to run an initial import of the portfolio offer data
+  // - a supplier's system produces updates of price information on a room or board level for an accommodation
+  // - a supplier wants to reset the offer data of a room or board for an accommodation
+  // - a supplier wants to remove offer data of a room or board implicitly by explicitly delivering all available
+  //   offer data for that room or board
+  //
+  // UpsertGroupOfferData is not intended for the following scenarios:
+  // - a single price/allotment has changed
+  // - a supplier's system produces updates of price information on arrival date or length of stay level
+  //
+  // See UpsertAccommodationOfferData and UpsertSingleOfferData for information on how to update offer data on
+  // different levels with different replacement mechanisms.
+  rpc UpsertGroupOfferData (GroupOfferDataDeliveryRequest) returns (google.rpc.Status) {
+    option (google.api.http) = {
+                put: "/offerdata/groupoffers"
+                body: "payload"
+            };
+  }
+
+  // Remark: This call is not yet fully supported!
+  //
+  // Creates offer data for a given combination of:
+  // - accommodation
+  // - rate
+  // - room
+  // - board
+  // - arrival date
+  // - length of stay
+  // for a supplier.
+  // If offer information for the given accommodation/rate/room/board/arrival-date/length-of-stay combination already
+  // exists, all information is replaced by the new data. Offer data for the same combination but e.g. for a different
+  // arrival date or length of stay is not replaced.
+  //
+  // UpsertSingleOfferData is meant for for the following scenarios:
+  // - a single price/allotment has changed
+  // - a supplier's system produces updates of price information on arrival date or length of stay level
+  // - a booking system detected, that the cached price/availability does not match the live data
+  //
+  // UpsertSingleOfferData is not intended for the following scenarios:
+  // - a supplier wants to run an initial import of the portfolio offer data
+  // - a supplier wants to remove offer data
+  //
+  // See UpsertAccommodationOfferData and UpsertGroupOfferData for information on how to update offer data on
+  // higher levels with different replacement mechanisms.
+  rpc UpsertSingleOfferData (SingleOfferDataDeliveryRequest) returns (google.rpc.Status) {
+    option (google.api.http) = {
+                put: "/offerdata/singleoffer"
+                body: "payload"
+            };
+  }
+}
+
+// A message containing information about an accommodation entity. The payload's semantic depends on the
+// type of call, that it belongs to, e.g. see UpsertAccommodation.
+message AccommodationRequest {
+  // Accommodation entity including base data belonging to the request. This field contains the data to be sent,
+  // e.g. for updating purposes.
+  peakwork.api.accommodation.v1.basedata.Accommodation accommodation = 1;
+}
+
+// A message containing information about a rate entity. The payload's semantic depends on the type of
+// call, that it belongs to, e.g. see UpsertRate.
+message RateRequest
+{
+  // Rate entity including base data belonging to the request. This field contains the data to be sent,
+  // e.g. for updating purposes.
+  peakwork.api.accommodation.v1.basedata.Rate rate=1;
+}
+
+// A message containing information about a room entity. The payload's semantic depends on the type of
+// call, that it belongs to, e.g. see UpsertRoom.
+message RoomRequest
+{
+  // Room entity including base data belonging to the request. This field contains the data to be sent,
+  // e.g. for updating purposes.
+  peakwork.api.accommodation.v1.basedata.Room room =1;
+}
+
+// A message containing information about a board entity. The payload's semantic depends on the type of
+// call, that it belongs to, e.g. see UpsertBoard.
+message BoardRequest
+{
+  // Board entity including base data belonging to the request. This field contains the data to be sent,
+  // e.g. for updating purposes.
+  peakwork.api.accommodation.v1.basedata.Board board =1;
+}
+
+// A message containing offer information for a combination of an accommodation and a rate. The semantic of
+// the payload depends on the type of call, that it belongs to, e.g. see UpsertAccommodationOfferData.
+message AccommodationOfferDataDeliveryRequest
+{
+  // mandatory - The offer data for exactly one accommodation and one rate, that is being delivered
+  peakwork.api.accommodation.v1.offerdata.Accommodation_OfferData accommodations = 1;
+}
+
+// A message containing offer information for a group, i.e. a combination of an accommodation, rate, room and
+// board. The payload's semantic depends on the type of call, that it belongs to, e.g. see UpsertGroupOfferData.
+message GroupOfferDataDeliveryRequest
+{
+  // mandatory - The offer data for exactly one a group, i.e. a combination of an accommodation, rate, room and board,
+  // that are being delivered
+  GroupOfferDataDeliveryPayload payload = 5;
+}
+
+// Contains offer data for exactly one a group, i.e. a combination of an accommodation, rate, room and board.
+//
+// Keys: accommodation_identifier, rate_identifier, room_identifier, board_identifier
+// Values: offer_group, price_sets
+//
+// Offer data information is given in offer_group. The prices in offer_group may reference data in price_sets.
+// price_sets is to be used as a lookup table for data in offer_group and is intended for reuse within offer_group and
+// across different offer_group for data size optimization.
+message GroupOfferDataDeliveryPayload {
+  // mandatory - Identifier for the accommodation used by the supplier. This identifier references an accommodation
+  // entity (supplierAccommodationId) from the BaseDataService. See supplierAccommodationId of Accommodation.
+  // The offer information of this message is valid for the referenced accommodation only.
+  string accommodation_identifier = 1;
+  // mandatory - Identifier for the rate used by the supplier. This identifier references a rate
+  // entity (rateIdentifier) from the BaseDataService. See boardIdentifier of Rate.
+  // The offer information of this message is valid for the referenced rate only.
+  string rate_identifier = 4;
+  // mandatory - Identifier for the room used by the supplier. This identifier references a room
+  // entity (roomIdentifier) from the BaseDataService. See roomIdentifier of Room.
+  // The offer information of this message is valid for the referenced room only.
+  string room_identifier = 2;
+  // mandatory - Identifier for the board used by the supplier. This identifier references a board
+  // entity (boardIdentifier) from the BaseDataService. See boardIdentifier of Board.
+  // The offer information of this message is valid for the referenced board only.
+  string board_identifier = 3;
+
+  // mandatory - A list of offer groups. Each offer group contains multiple arrival dates and LOSs, to which the same
+  // pricing structure applies, as well as the price information itself (in form of references to the price_sets).
+  // Multiple offer groups can be given.
+  //
+  // A GroupOfferDataDeliveryPayload message for a given accommodation, rate, room and board should contain all offer
+  // groups (arrival date + LOS combinations) for the given key, as all other preexisting offer groups will be
+  // removed.
+  //
+  // See OfferGroup for more details.
+  repeated peakwork.api.accommodation.v1.offerdata.OfferGroup offer_group = 5;
+  // mandatory - Map of all PriceSets used in this message. The price sets are referenced by the offer groups via a
+  // unique numeric key (uint32). This key is bound to a specific message and can be arbitrarily chosen. This means
+  // a key for a price set in one message can be different for the same price set in a different message. It does not
+  // serve as a permanent identifier of a price set.
+  //
+  // A price set can be referenced multiple times from offer groups in order to reuse the pricing structure in it. The
+  // purpose is to optimize the data size by not duplicating the same price data multiple times (e.g. for the same
+  // price on consecutive arrival dates or on consecutive days of the stay).
+  //
+  // See PriceSet for more details.
+  map<uint32, peakwork.api.accommodation.v1.offerdata.PriceSet> price_sets = 6;
+}
+
+// A message containing offer information for a single offer, i.e. a combination of an accommodation, rate, room,
+// board, arrival date and length of stay. The payload's semantic depends on the type of call, that it belongs to,
+// e.g. see UpsertSingleOfferData.
+message SingleOfferDataDeliveryRequest
+{
+  // mandatory - The offer data for a single offer, i.e. a combination of an accommodation, rate, room, board, arrival
+  // date and length of stay, that are being delivered
+  SingleOfferDataDeliveryPayload payload = 7;
+}
+
+// Contains offer data for a single offer, i.e. a combination of an accommodation, rate, room, board, arrival date and
+// length of stay.
+//
+// Keys: accommodation_identifier, rate_identifier, room_identifier, board_identifier, arrivalDate, offer_value
+// Values: offer_value, price_sets
+//
+// Offer data information is given in offer_value. The prices in offer_value may reference data in price_sets.
+// price_sets is to be used as a lookup table for data in offer_value and is intended for reuse within offer_value for
+// data size optimization.
+message SingleOfferDataDeliveryPayload {
+  // mandatory - Identifier for the accommodation used by the supplier. This identifier references an accommodation
+  // entity (supplierAccommodationId) from the BaseDataService. See supplierAccommodationId of Accommodation.
+  // The offer information of this message is valid for the referenced accommodation only.
+  string accommodation_identifier = 1;
+  // mandatory - Identifier for the rate used by the supplier. This identifier references a rate
+  // entity (rateIdentifier) from the BaseDataService. See rateIdentifier of Rate.
+  // The offer information of this message is valid for the referenced rate only.
+  string rate_identifier = 4;
+  // mandatory - Identifier for the room used by the supplier. This identifier references a room
+  // entity (roomIdentifier) from the BaseDataService. See roomIdentifier of Room.
+  // The offer information of this message is valid for the referenced room only.
+  string room_identifier = 2;
+  // mandatory - Identifier for the board used by the supplier. This identifier references a board
+  // entity (boardIdentifier) from the BaseDataService. See boardIdentifier of Board.
+  // The offer information of this message is valid for the referenced board only.
+  string board_identifier = 3;
+  // mandatory - The arrival date, that the offer information is valid for. The prices will only be changed for the
+  // given arrival date.
+  google.type.Date arrivalDate = 5;
+  // mandatory - The lengths of stay (LOSs), that the offer information is valid for. The prices will only be changed for the
+  // given length of stay.
+  uint32 los = 6;
+
+  // mandatory - The offer information including most importantly the price information about the single offer. The
+  // offer information is valid only for the given key combination of accommodation, rate, room, board, arrival date and
+  // length of stay. The offer value contains price information in form of references to price_sets.
+  //
+  // See OfferValue for more details.
+  peakwork.api.accommodation.v1.offerdata.OfferValue offer_value = 7;
+  // mandatory - Map of all PriceSets used in this message. The price sets are referenced by the offer_value via a
+  // unique numeric key (uint32). This key is bound to a specific message and can be arbitrarily chosen. This means
+  // a key for a price set in one message can be different for the same price set in a different message. It does not
+  // serve as a permanent identifier of a price set.
+  //
+  // A price set can be referenced multiple times from an offer_value in order to reuse the pricing structure in it. The
+  // purpose is to optimize the data size by not duplicating the same price data multiple times (e.g. for the same
+  // price on consecutive days of the stay).
+  //
+  // See PriceSet for more details.
+  map<uint32, peakwork.api.accommodation.v1.offerdata.PriceSet> price_sets = 8;
+}
+
+
+
+
+
+
