@@ -1,4 +1,4 @@
-package com.peakwork.platformx.accommodationapi.client.example.client;
+package com.peakwork.platformx.client.accommodationapi;
 
 import io.grpc.CallOptions;
 import io.grpc.Channel;
@@ -13,42 +13,45 @@ import io.grpc.MethodDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ApiChannel {
 
+/**
+ * Holds the connection to grpc service
+ */
+public class Connection implements AutoCloseable {
 
-    private static final Logger logger = LoggerFactory.getLogger(ApiChannel.class);
-    private final Channel securedChannel;
-    private final ManagedChannel channel;
+    private static final Logger logger = LoggerFactory.getLogger(Connection.class);
+    private final Channel channel;
+    private final ManagedChannel managedChannel;
 
-
-    public ApiChannel(String url, String apikey) {
-        channel = ManagedChannelBuilder.forTarget(url)
+    public Connection(String url, String apikey) {
+        managedChannel = ManagedChannelBuilder.forTarget(url)
+                //unsecured managedChannel used only for testing purposes
                 .usePlaintext()
-                // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
-                // needing certificates.
                 .build();
 
-        //create sevice clients  with apikey
-        securedChannel = ClientInterceptors.intercept(channel, new Interceptor(apikey));
+        //provide api key via call interceptor
+        channel = ClientInterceptors.intercept(managedChannel, new AuthorizationMetaAppender(apikey));
     }
 
-    public void closeConnections() {
-        channel.shutdown();
+    public void close() {
+        managedChannel.shutdown();
         logger.info("Channel closed");
     }
 
-    public Channel getSecuredChannel() {
-        return securedChannel;
+    public Channel getChannel() {
+        return channel;
     }
 
-
-    private final class Interceptor implements ClientInterceptor {
+    /**
+     * Appends api key as a metadata to each call
+     */
+    private final class AuthorizationMetaAppender implements ClientInterceptor {
 
         private final Metadata.Key<String> API_KEY_HEADER =
                 Metadata.Key.of("x-api-key", Metadata.ASCII_STRING_MARSHALLER);
         private final String apiKey;
 
-        private Interceptor(String apiKey) {
+        private AuthorizationMetaAppender(String apiKey) {
             this.apiKey = apiKey;
         }
 

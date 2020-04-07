@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <property resource="application.properties"/>
-  <!--<contextName>${spring.application.name}</contextName>-->
-
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-    <encoder><!-- each log in single line   %replace(%msg){'[\n\r]',''} instead of %msg-->
-      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %replace(%msg){'[\n\r]',''}%n</pattern>
-    </encoder>
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="CONSOLE">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>
+        %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %replace(%msg){'[\n\r]',''}%n
+      </Pattern>
+    </layout>
   </appender>
 
-  <logger name="myLogger" level="INFO" additivity="false">
-    <appender-ref ref="STDOUT"/>
+  <!-- Stop output INFO at start -->
+  <logger additivity="false" level="info" name="myLogger">
+    <appender-ref ref="CONSOLE"/>
   </logger>
 
-  <root level="INFO" additivity="false">
-    <appender-ref ref="STDOUT"/>
+  <root level="info">
+    <appender-ref ref="CONSOLE"/>
   </root>
+
+  <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
 </configuration>
