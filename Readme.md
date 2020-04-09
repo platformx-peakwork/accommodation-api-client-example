@@ -34,9 +34,9 @@ room data for the 'roomIdentifier' or creation of new in case there was no such 
 
 # Links
 
-[DRV Global Types](https://www.drv.de/public/Downloads_2019/12-11-23_DRV_Datenstandard_Broschuere_ENG.pdf)
+[DRV Global Types](https://globaltypecenter.de/index.php?language=en)
 
-[grpc](https://grpc.io)
+[Google GRPC](https://grpc.io)
 
 
 
