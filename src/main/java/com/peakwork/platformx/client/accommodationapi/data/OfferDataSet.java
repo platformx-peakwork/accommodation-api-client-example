@@ -33,7 +33,7 @@ public class OfferDataSet {
 
         //for LOS=2
         //define DATE:LOS combinations:
-        //tomorrow:1 , dayAfterTomorrow:1
+        //tomorrow:2 , dayAfterTomorrow:2
         DateLosGroup dateLosGroupWithLos2 = DateLosGroup.newBuilder()
                 .addArrivalDates(tomorrow)
                 .addArrivalDates(dayAfterTomorrow)

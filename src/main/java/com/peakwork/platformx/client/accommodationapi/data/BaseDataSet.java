@@ -20,6 +20,7 @@ public class BaseDataSet {
                         .setStreet("Sunset Blvd")
                         .build())
                 .putName("en_US", "Cecil Hotel")
+                .putName("de_DE", "Cecil Hotel")
                 .addArrivalAirports("DUS")
                 .build();
     }
@@ -27,10 +28,11 @@ public class BaseDataSet {
     public static Room createRoom() {
         return Room.newBuilder()
                 .putName("en_US", "Deluxe double room")
+                .putName("de_DE", "Deluxe Doppelzimmer")
                 .setRoomIdentifier("roomA")
                 .addGlobalTypes(GlobalType.newBuilder()
-                        .setGT("GT04-FH")
-                        .setST("ST04_VI")
+                        .setGT("GT04-RO")
+                        .setST("ST04_DO")
                         .build())
                 .setOccupancy(Occupancy.newBuilder()
                         .setMinPax(1)
@@ -45,6 +47,7 @@ public class BaseDataSet {
     public static Board createBoard() {
         return Board.newBuilder()
                 .putName("en_US", "All inclusive")
+                .putName("de_DE", "All inclusive")
                 .setBoardIdentifier("boardA")
                 .addGlobalTypes(GlobalType.newBuilder()
                         .setGT("GT06-XX")

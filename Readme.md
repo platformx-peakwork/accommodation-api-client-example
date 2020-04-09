@@ -16,12 +16,21 @@ contains only simplified 'object' price structure.
 
 # API notes
 
+Uniqueness of an 
+entity are defined by fields containing 'identifier' suffix.
+
+## Error handling
+
+Every call return [`google.rpc.Status`](./src/main/proto/google/status.proto) which is also 
+compatible with HTTP response codes. See proto documentation for more info.
+
 ## Data Consistency
  
 Any single type of an api call(upsertRoom, upsertBoard...) can be performed in arbitrary order
 in relation to any single other one. Calls have 'update or insert' semantics, 
 for example, 'upsertRoom' call will issue overriding of the currently persisted 
-room data for the 'roomIdentifier' or creation of new in case there was no such one.
+room data for the 'roomIdentifier' or creation of new in case there was no such one. 
+
 
 # Links
 
