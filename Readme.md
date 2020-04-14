@@ -65,10 +65,10 @@ with data access objects for an any preferred language(s).
 To learn more about protocol buffers, including how to install protoc with 
 the gRPC plugin in your chosen language, see the Links section.
 
-In order to connect to the Accommodation API service the example 
-implementation uses Java gRPC service stubs generated from the Protobuf
-API definition. For the generation of a Java gRPC client classes the implementation uses
-Protobuf Maven Plugin, see Links section.
+The example implementation connected to the Accommodation API via Java 
+gRPC service stubs generated from the Protobuf API definition. For the 
+generation of a Java gRPC client classes, the implementation uses
+Protobuf Maven Plugin, see the Links section.
 
  
 
