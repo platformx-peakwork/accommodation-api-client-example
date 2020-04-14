@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>client</artifactId>
+  <artifactId>accommodation-api-client-example</artifactId>
 
   <build>
-
     <extensions>
       <extension>
         <artifactId>os-maven-plugin</artifactId>
@@ -13,10 +11,7 @@
         <version>1.5.0.Final</version>
       </extension>
     </extensions>
-
-
     <plugins>
-
       <plugin>
         <artifactId>protobuf-maven-plugin</artifactId>
         <configuration>
@@ -36,7 +31,6 @@
         <groupId>org.xolstice.maven.plugins</groupId>
         <version>0.6.1</version>
       </plugin>
-
     </plugins>
   </build>
   <dependencies>
@@ -45,19 +39,6 @@
       <groupId>io.grpc</groupId>
       <scope>runtime</scope>
     </dependency>
-
-    <dependency>
-      <artifactId>grpc-google-cloud-pubsub-v1</artifactId>
-      <groupId>com.google.api.grpc</groupId>
-      <version>0.1.24</version>
-    </dependency>
-
-    <!--<dependency>-->
-    <!--<groupId>com.google.cloud</groupId>-->
-    <!--<artifactId>google-cloud-pubsub</artifactId>-->
-    <!--<version>1.85.0</version>-->
-    <!--</dependency>-->
-
 
     <dependency>
       <artifactId>grpc-protobuf</artifactId>
@@ -69,44 +50,10 @@
     </dependency>
 
     <dependency>
-      <artifactId>grpc-auth</artifactId>
-      <groupId>io.grpc</groupId>
-    </dependency>
-    <!-- used to authenticate to pusbusb-->
-    <dependency>
-      <artifactId>google-auth-library-oauth2-http</artifactId>
-      <groupId>com.google.auth</groupId>
-      <version>0.16.2</version>
-    </dependency>
-
-
-    <!--<dependency>-->
-    <!--<groupId>io.grpc</groupId>-->
-    <!--<artifactId>grpc-all</artifactId>-->
-    <!--</dependency>-->
-
-
-    <dependency>
       <artifactId>javax.annotation-api</artifactId>
       <groupId>javax.annotation</groupId>
       <scope>provided</scope>
-      <version>1.3.2</version> <!-- not needed at runtime -->
-    </dependency>
-    <!-- <dependency>
-       <groupId>io.grpc</groupId>
-       <artifactId>grpc-testing</artifactId>
-       <scope>test</scope>
-     </dependency>-->
-    <dependency>
-      <artifactId>protobuf-java-util</artifactId>
-      <groupId>com.google.protobuf</groupId>
-      <version>${protobuf.version}</version>
-    </dependency>
-
-    <dependency>
-      <artifactId>google-cloud-logging-logback</artifactId>
-      <groupId>com.google.cloud</groupId>
-      <version>0.103.0-alpha</version>
+      <version>1.3.2</version>
     </dependency>
 
     <dependency>
@@ -114,7 +61,6 @@
       <groupId>ch.qos.logback</groupId>
       <version>1.2.3</version>
     </dependency>
-
   </dependencies>
   <dependencyManagement>
     <dependencies>
@@ -137,15 +83,12 @@
   <properties>
     <exec.mainClass>com.peakwork.platformx.client.accommodationapi.App</exec.mainClass>
     <grpc.version>1.22.1</grpc.version>
-    <maven.compiler.source>1.8</maven.compiler.source><!-- CURRENT_GRPC_VERSION -->
+    <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <!-- required for jdk9 -->
     <protobuf.version>3.7.1</protobuf.version>
     <protoc.version>3.7.1</protoc.version>
   </properties>
 
   <version>0.2.0-SNAPSHOT</version>
-
-
 </project>
