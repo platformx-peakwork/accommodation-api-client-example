@@ -15,27 +15,27 @@ contains a simplified 'stay' and 'object' price structure. For more
 complex cases involving daily prices as well as person prices, see the 
 Accommodation API documentation.
 
-# What the Accommodation API is ?
+#### What the Accommodation API is ?
 The Peakwork Accommodation API is used by accommodation suppliers like 
 bed banks or hotel chains to provide their accommodation portfolio to 
 the Peakwork network for distribution to partner companies like tour operators.
 
 # API Notes
 
-## gRPC/Protobuf 
+### gRPC/Protobuf 
 The Accommodation API, both the payload entities and a services, is defined in 
 language-neutral, platform-neutral way using Protobuf. For more 
 information on gRPC/Protobuf see the section Links, also see 
 'gRPC Java Generation section'.
 
 
-## Error Handling
+### Error Handling
 
 Every call returns a google.rpc.Status message, which is also compatible 
 with HTTP response codes. See Protobuf documentation for more information.
 [`google.rpc.Status`](./src/main/proto/google/rpc/status.proto)
 
-## Data Consistency
+### Data Consistency
  
 Any single API call of a certain type (upsertRoom, upsertBoard...) can be 
 performed in arbitrary order in relation to any single one of other type. 
@@ -48,12 +48,12 @@ previous call to 'upsertRoom'.
 
 # Implementation
 
-## Technology 
+### Technology 
 
 * Java
 * Maven
 
-## gRPC Java Generation
+### gRPC Java Generation
 
 gRPC uses the 'protoc' compiler with a special gRPC plugin to generate 
 code from proto file. As a result, we get generated gRPC client and server code along 
@@ -69,16 +69,6 @@ Protobuf Maven Plugin, see the Links section.
 
  
 
-# Links
-
-[DRV Global Types](https://globaltypecenter.de/index.php?language=en) - GlobalType Center
-
-[Google gRPC](https://grpc.io) - A high-performance, open source universal RPC framework
-
-[Protocol Buffers](https://developers.google.com/protocol-buffers/docs/overview) - Potocol Buffers. Developer Guide
-
-[Protobuf Maven Plugin](https://github.com/xolstice/protobuf-maven-plugin) - Plugin that executes the Protocol Buffers (protoc) compiler
-
 # How to Run ?
 
 Prerequisites:
@@ -93,3 +83,14 @@ Parameters:
 ```bash
 mvn clean compile exec:java -Dexec.args="$URL $API_KEY"
 ```
+
+
+# Links
+
+[DRV Global Types](https://globaltypecenter.de/index.php?language=en) - GlobalType Center
+
+[Google gRPC](https://grpc.io) - A high-performance, open source universal RPC framework
+
+[Protocol Buffers](https://developers.google.com/protocol-buffers/docs/overview) - Potocol Buffers. Developer Guide
+
+[Protobuf Maven Plugin](https://github.com/xolstice/protobuf-maven-plugin) - Plugin that executes the Protocol Buffers (protoc) compiler
