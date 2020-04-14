@@ -22,19 +22,37 @@ contains a simplified 'stay' and 'object' price structure. For more
 complex cases involving daily prices as well as person prices, see the 
 Accommodation API documentation.
 
-# Notes on Implementation
+# Implementation
 
 ## Technology 
 * java
 * maven
 
 ## gRPC Java Generation
+
+gRPC uses protoc with a special gRPC plugin to generate code from 
+the proto file. As a result, we get generated gRPC client and server code along 
+with the data access objects for an any preferred language(s).
+
+To learn more about protocol buffers, including how to install protoc with 
+the gRPC plugin in your chosen language, see the protocol buffers documentation.
+
 In order to connect to the Accommodation API service the example 
-implementation uses gRPC Java service stubs generated from the Protobuf
-API definition. For more information on gRPC/Protobuf see the section 
-Links. 
+implementation uses Java gRPC service stubs generated from the Protobuf
+API definition. For the generation of a Java gRPC client classes the implementation uses
+Protobuf Maven Plugin, see Links section.
+
+ 
+
 
 # API Notes
+
+## gRPC/Protobuf 
+The Accommodation API, both the payload entities and a services, is defined in 
+language-neutral, platform-neutral way using Protobuf. For more 
+information on gRPC/Protobuf see the section Links, also see 
+'gRPC Java Generation section'.
+
 
 ## Error Handling
 
@@ -60,7 +78,7 @@ previous call to 'upsertRoom'.
 
 [Google gRPC](https://grpc.io) - A high-performance, open source universal RPC framework
 
-[Protobuf Maven Plugin](https://github.com/xolstice/protobuf-maven-plugin) - Maven Plugin that executes the Protocol Buffers (protoc) compiler
+[Protobuf Maven Plugin](https://github.com/xolstice/protobuf-maven-plugin) - Plugin that executes the Protocol Buffers (protoc) compiler
 
 # How to Run ?
 
