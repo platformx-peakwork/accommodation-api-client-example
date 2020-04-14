@@ -4,13 +4,6 @@ This example is aimed to provide basic client implementation
 for the developers when they integrate 
 the supplier's system with the Accommodation API.
 
-# What the Accommodation API is ?
-The Peakwork Accommodation API is used by accommodation suppliers like 
-bed banks or hotel chains to provide their accommodation portfolio to 
-the Peakwork network for distribution to partner companies like tour operators.
-
-# What does the Example do ?
-
 The application covers an example implementation of how to send base and
 offer data to the Accommodation API. The scope is narrowed down to send 
 base data consisting of a single accommodation, room, board and rate as 
@@ -22,6 +15,10 @@ contains a simplified 'stay' and 'object' price structure. For more
 complex cases involving daily prices as well as person prices, see the 
 Accommodation API documentation.
 
+# What the Accommodation API is ?
+The Peakwork Accommodation API is used by accommodation suppliers like 
+bed banks or hotel chains to provide their accommodation portfolio to 
+the Peakwork network for distribution to partner companies like tour operators.
 
 # API Notes
 
