@@ -52,15 +52,19 @@ public class App {
         String apiKey = getArgument(args, 1, "api key");
 
         ManagedChannel managedChannel = getManagedChannel(url);
-        // provide api key via call interceptor
-        Channel channel = getChannel(apiKey, managedChannel);
 
-        // execute all calls to send base and offer data
-        sendBaseData(channel);
-        sendOfferData(channel);
+        try {
+            // provide api key via call interceptor
+            Channel channel = getChannel(apiKey, managedChannel);
 
-        // close connection
-        managedChannel.shutdown();
+            // execute all calls to send base and offer data
+            sendBaseData(channel);
+            sendOfferData(channel);
+
+        } finally {
+            // close connection
+            managedChannel.shutdown();
+        }
     }
 
     private static String getArgument(String[] args, int pos, String name) {
