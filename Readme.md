@@ -24,7 +24,7 @@ Accommodation API documentation.
 
 ## gRPC/Protobuf 
 The Accommodation API, both the payload entities and a services, is defined in 
-language-neutral, platform-neutral way using Protobuf. For more 
+language-neutral, platform-neutral way using Protobuf, see [here](./src/main/proto/accommodation-api.proto). For more 
 information on gRPC/Protobuf see the section Links, also see 
 'gRPC Java Generation section'.
 
@@ -62,10 +62,8 @@ with data access objects for an any preferred language(s).
 To learn more about protocol buffers, including how to install protoc with 
 the gRPC plugin in your chosen language, see the Links section.
 
-The example implementation connected to the Accommodation API via Java 
-gRPC service stubs generated from the Protobuf API definition. For the 
-generation of a Java gRPC client classes, the implementation uses
-Protobuf Maven Plugin, see the Links section.
+For the generation of a Java gRPC client classes, actual implementation 
+uses Protobuf Maven Plugin, see the Links section.
 
  
 
