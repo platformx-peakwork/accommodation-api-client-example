@@ -1,7 +1,7 @@
 # Accommodation API Client Example
 
 This example is aimed to provide basic client implementation 
-for the developers when they integrate 
+for developers of accommodation suppliers, when they integrate 
 the supplier's system with the Accommodation API.
 
 The Peakwork Accommodation API is used by accommodation suppliers like 
@@ -19,21 +19,23 @@ contains a simplified 'stay' and 'object' price structure. For more
 complex cases involving daily prices as well as person prices, see the 
 Accommodation API documentation.
 
+In order to run the example, see section [How to Run](#how-to-run).
+In order to start diving into the code, see [App.java](./src/main/java/com/peakwork/platformx/client/accommodationapi/App.java).
+
 
 # API Notes
 
 ## gRPC/Protobuf 
-The Accommodation API, both the payload entities and a services, is defined in 
-language-neutral, platform-neutral way using Protobuf, see [here](./src/main/proto/accommodation-api.proto). For more 
-information on gRPC/Protobuf see the section Links, also see 
-'gRPC Java Generation section'.
+In the Accommodation API both the payload entities and the services are defined in 
+language-neutral, platform-neutral way using Protocol Buffers. Api definition proto files can be found [here](./src/main/proto/accommodation-api.proto). For more 
+information on gRPC/Protobuf see the section [Links](#links), also see 
+[gRPC Java Generation](#grpc-java-generation) section.
 
 
 ## Error Handling
 
-Every call returns a google.rpc.Status message, which is also compatible 
-with HTTP response codes. See Protobuf documentation for more information.
-[`google.rpc.Status`](./src/main/proto/google/rpc/status.proto)
+Every call returns a [`google.rpc.Status`](./src/main/proto/google/rpc/status.proto) message, which is also compatible 
+with HTTP response codes. See Protocol Buffers documentation for more information.
 
 ## Data Consistency
  
@@ -63,11 +65,11 @@ To learn more about protocol buffers, including how to install protoc with
 the gRPC plugin in your chosen language, see the Links section.
 
 For the generation of a Java gRPC client classes, actual implementation 
-uses Protobuf Maven Plugin, see the Links section.
+uses Protobuf Maven Plugin, see the [Links](#links) section.
 
  
 
-# How to Run ?
+# How to Run
 
 Prerequisites:
 * JDK

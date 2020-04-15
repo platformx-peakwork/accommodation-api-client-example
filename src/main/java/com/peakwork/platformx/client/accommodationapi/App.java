@@ -73,8 +73,7 @@ public class App {
 
     private static ManagedChannel getManagedChannel(String url) {
         return ManagedChannelBuilder.forTarget(url)
-                // unsecured managedChannel used only for testing purposes
-                .usePlaintext()
+                // use secured channel by default
                 .build();
     }
 
@@ -135,8 +134,10 @@ public class App {
                 .setAccommodation(accommodation)
                 .build();
 
+        // execute the call
         Status upsertAccommodation = baseDataService.upsertAccommodation(accommodationRequest);
 
+        // get the status result
         logger.info("Status: {}", Code.forNumber(upsertAccommodation.getCode()).name());
     }
 
@@ -151,8 +152,10 @@ public class App {
                         .build())
                 .build()).build();
 
+        // execute the call
         Status upsertRate = baseDataService.upsertRate(rateRequest);
 
+        // get the status result
         logger.info("Status: {}", Code.forNumber(upsertRate.getCode()).name());
 
     }
@@ -177,8 +180,10 @@ public class App {
                         .build())
                 .build()).build();
 
+        // execute the call
         Status upsertRoom = baseDataService.upsertRoom(roomRequest);
 
+        // get the status result
         logger.info("Status: {}", Code.forNumber(upsertRoom.getCode()).name());
     }
 
@@ -194,8 +199,10 @@ public class App {
                         .build())
                 .build()).build();
 
+        // execute the call
         Status upsertBoard = baseDataService.upsertBoard(boardRequest);
 
+        // get the status result
         logger.info("Status: {}", Code.forNumber(upsertBoard.getCode()).name());
     }
 
