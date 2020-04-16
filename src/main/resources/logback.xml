@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="CONSOLE">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>
+        %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %replace(%msg){'[\n\r]',''}%n
+      </Pattern>
+    </layout>
+  </appender>
+
+  <!-- Stop output INFO at start -->
+  <logger additivity="false" level="info" name="myLogger">
+    <appender-ref ref="CONSOLE"/>
+  </logger>
+
+  <root level="info">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+  <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+</configuration>
