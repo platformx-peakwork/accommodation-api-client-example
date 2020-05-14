@@ -22,6 +22,9 @@ import "google/type/date.proto";
 import "basedata.proto";
 import "offerdata.proto";
 
+
+
+
 // The BaseDataService is used to send various base data, i.e. static meta information, about the accommodation
 // portfolio to Peakwork in order to distribute it. Base data contains various entities, like accommodations, rooms or
 // boards. These entities contain meta information, that is shared among all distribution partners. This means,
@@ -189,38 +192,43 @@ message AccommodationRequest {
 
 // A message containing information about a rate entity. The payload's semantic depends on the type of
 // call, that it belongs to, e.g. see UpsertRate.
-message RateRequest {
+message RateRequest
+{
   // Rate entity including base data belonging to the request. This field contains the data to be sent,
   // e.g. for updating purposes.
-  peakwork.api.accommodation.v1.basedata.Rate rate = 1;
+  peakwork.api.accommodation.v1.basedata.Rate rate=1;
 }
 
 // A message containing information about a room entity. The payload's semantic depends on the type of
 // call, that it belongs to, e.g. see UpsertRoom.
-message RoomRequest {
+message RoomRequest
+{
   // Room entity including base data belonging to the request. This field contains the data to be sent,
   // e.g. for updating purposes.
-  peakwork.api.accommodation.v1.basedata.Room room = 1;
+  peakwork.api.accommodation.v1.basedata.Room room =1;
 }
 
 // A message containing information about a board entity. The payload's semantic depends on the type of
 // call, that it belongs to, e.g. see UpsertBoard.
-message BoardRequest {
+message BoardRequest
+{
   // Board entity including base data belonging to the request. This field contains the data to be sent,
   // e.g. for updating purposes.
-  peakwork.api.accommodation.v1.basedata.Board board = 1;
+  peakwork.api.accommodation.v1.basedata.Board board =1;
 }
 
 // A message containing offer information for a combination of an accommodation and a rate. The semantic of
 // the payload depends on the type of call, that it belongs to, e.g. see UpsertAccommodationOfferData.
-message AccommodationOfferDataDeliveryRequest {
+message AccommodationOfferDataDeliveryRequest
+{
   // mandatory - The offer data for exactly one accommodation and one rate, that is being delivered
   peakwork.api.accommodation.v1.offerdata.Accommodation_OfferData accommodations = 1;
 }
 
 // A message containing offer information for a group, i.e. a combination of an accommodation, rate, room and
 // board. The payload's semantic depends on the type of call, that it belongs to, e.g. see UpsertGroupOfferData.
-message GroupOfferDataDeliveryRequest {
+message GroupOfferDataDeliveryRequest
+{
   // mandatory - The offer data for exactly one a group, i.e. a combination of an accommodation, rate, room and board,
   // that are being delivered
   GroupOfferDataDeliveryPayload payload = 5;
@@ -262,7 +270,7 @@ message GroupOfferDataDeliveryPayload {
   //
   // See OfferGroup for more details.
   repeated peakwork.api.accommodation.v1.offerdata.OfferGroup offer_group = 5;
-  // mandatory - Map of all PriceSets used in this message. The price sets are referenced by the offer groups via a
+  // Map of all PriceSets used in this message. The price sets are referenced by the offer groups via a
   // unique numeric key (uint32). This key is bound to a specific message and can be arbitrarily chosen. This means
   // a key for a price set in one message can be different for the same price set in a different message. It does not
   // serve as a permanent identifier of a price set.
@@ -278,7 +286,8 @@ message GroupOfferDataDeliveryPayload {
 // A message containing offer information for a single offer, i.e. a combination of an accommodation, rate, room,
 // board, arrival date and length of stay. The payload's semantic depends on the type of call, that it belongs to,
 // e.g. see UpsertSingleOfferData.
-message SingleOfferDataDeliveryRequest {
+message SingleOfferDataDeliveryRequest
+{
   // mandatory - The offer data for a single offer, i.e. a combination of an accommodation, rate, room, board, arrival
   // date and length of stay, that are being delivered
   SingleOfferDataDeliveryPayload payload = 7;
@@ -323,7 +332,7 @@ message SingleOfferDataDeliveryPayload {
   //
   // See OfferValue for more details.
   peakwork.api.accommodation.v1.offerdata.OfferValue offer_value = 7;
-  // mandatory - Map of all PriceSets used in this message. The price sets are referenced by the offer_value via a
+  // Map of all PriceSets used in this message. The price sets are referenced by the offer_value via a
   // unique numeric key (uint32). This key is bound to a specific message and can be arbitrarily chosen. This means
   // a key for a price set in one message can be different for the same price set in a different message. It does not
   // serve as a permanent identifier of a price set.
