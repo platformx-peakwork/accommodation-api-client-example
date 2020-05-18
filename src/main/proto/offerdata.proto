@@ -18,39 +18,39 @@ import "common.proto";
 // price_sets is to be used as a lookup table for data in Room_OfferData and is intended for reuse within a
 // Room_OfferData and across different Room_OfferData elements for data size optimization.
 message Accommodation_OfferData {
-  // mandatory - Identifier for the accommodation used by the supplier. This identifier references an accommodation
-  // entity (supplierAccommodationId) from the BaseDataService. See supplierAccommodationId of Accommodation.
-  // The offer information of this payload is valid for the referenced accommodation only.
-  string accommodation_identifier = 1;
-  // mandatory - Identifier for the rate used by the supplier. This identifier references a rate
-  // entity (rateIdentifier) from the BaseDataService. See rateIdentifier of Rate.
-  // The offer information of this payload is valid for the referenced rate only.
-  string rate_identifier = 2;
-  // optional - Split identifier used to split deliveries of offer data for an accommodation and rate further down
-  // for technical reasons. Currently not implemented.
-  map<string, string> split_identifier = 3;
+	// mandatory - Identifier for the accommodation used by the supplier. This identifier references an accommodation
+	// entity (supplierAccommodationId) from the BaseDataService. See supplierAccommodationId of Accommodation.
+	// The offer information of this payload is valid for the referenced accommodation only.
+	string accommodation_identifier = 1;
+	// mandatory - Identifier for the rate used by the supplier. This identifier references a rate
+	// entity (rateIdentifier) from the BaseDataService. See rateIdentifier of Rate.
+	// The offer information of this payload is valid for the referenced rate only.
+	string rate_identifier=2;
+	// optional - Split identifier used to split deliveries of offer data for an accommodation and rate further down
+	// for technical reasons. Currently not implemented.
+	map<string, string> split_identifier = 3;
 
-  // mandatory - Denotes the currency of the offer prices in the given message. All prices in a single message, e.g. for
-  // different rooms, boards or arrival dates, have the same currency. The currency is given as code in ISO 4217
-  // standard.
-  string currency = 4;
-  // mandatory - List of offer data grouped by rooms. rooms contains the offer data information for the message, i.e.
-  // the accommodation and rate combination. On this level, the offer data is grouped by rooms (see Room in
-  // BaseDataService). Each Room_OfferData element will contain all offer data for a single room (in the given
-  // accommodation and rate key combination).
-  repeated Room_OfferData rooms = 5;
-  // mandatory - Map of all PriceSets used in this message. The price sets are referenced by the data in the various
-  // RoomOfferData elements via a unique numeric key (uint32). This key is bound to a specific message and can be
-  // arbitrarily chosen. This means a key for a price set in one message can be different for the same price set in a
-  // different message. It does not serve as a permanent identifier of a price set.
-  //
-  // A price set can be referenced multiple times in a single RoomOfferData entity or even in multiple different
-  // RoomOfferData entities in order to reuse the pricing structure in it. The purpose is to optimize the data size by
-  // not duplicating the same price data multiple times (e.g. for the same price on consecutive arrival dates or on
-  // consecutive days of the stay).
-  //
-  // See PriceSet for more details.
-  map<uint32, PriceSet> price_sets = 6;
+	// mandatory - Denotes the currency of the offer prices in the given message. All prices in a single message, e.g. for
+	// different rooms, boards or arrival dates, have the same currency. The currency is given as code in ISO 4217
+	// standard.
+	string currency = 4;
+	// mandatory - List of offer data grouped by rooms. rooms contains the offer data information for the message, i.e.
+	// the accommodation and rate combination. On this level, the offer data is grouped by rooms (see Room in
+	// BaseDataService). Each Room_OfferData element will contain all offer data for a single room (in the given
+	// accommodation and rate key combination).
+	repeated Room_OfferData rooms = 5;
+	// Map of all PriceSets used in this message. The price sets are referenced by the data in the various
+	// RoomOfferData elements via a unique numeric key (uint32). This key is bound to a specific message and can be
+	// arbitrarily chosen. This means a key for a price set in one message can be different for the same price set in a
+	// different message. It does not serve as a permanent identifier of a price set.
+	//
+	// A price set can be referenced multiple times in a single RoomOfferData entity or even in multiple different
+	// RoomOfferData entities in order to reuse the pricing structure in it. The purpose is to optimize the data size by
+	// not duplicating the same price data multiple times (e.g. for the same price on consecutive arrival dates or on
+	// consecutive days of the stay).
+	//
+	// See PriceSet for more details.
+	map<uint32, PriceSet> price_sets = 6;
 }
 
 // Contains offer data associated with one room. The offer data is only valid for the room given by its room_identifier.
@@ -60,15 +60,15 @@ message Accommodation_OfferData {
 // Keys: room_identifier
 // Values: boards
 message Room_OfferData {
-  // mandatory - Identifier for the room used by the supplier. This identifier references a room
-  // entity (roomIdentifier) from the BaseDataService. See roomIdentifier of Room.
-  // The offer information of this message is valid for the referenced room only.
-  string room_identifier = 1;
+	// mandatory - Identifier for the room used by the supplier. This identifier references a room
+	// entity (roomIdentifier) from the BaseDataService. See roomIdentifier of Room.
+	// The offer information of this message is valid for the referenced room only.
+	string room_identifier = 1;
 
-  // mandatory - List of offer data grouped by boards. boards contains the offer data information for the room. On this
-  // level, the offer data is grouped by boards (see Board in BaseDataService). Each Board_OfferData element will
-  // contain all offer data for a single board (in the given room).
-  repeated Board_OfferData boards = 2;
+	// mandatory - List of offer data grouped by boards. boards contains the offer data information for the room. On this
+	// level, the offer data is grouped by boards (see Board in BaseDataService). Each Board_OfferData element will
+	// contain all offer data for a single board (in the given room).
+	repeated Board_OfferData boards = 2;
 }
 
 // Contains offer data associated with one board. The offer data is only valid for the board given by its
@@ -78,18 +78,18 @@ message Room_OfferData {
 // Keys: board_identifier
 // Values: offer_groups
 message Board_OfferData {
-  // mandatory - Identifier for the board used by the supplier. This identifier references a board
-  // entity (boardIdentifier) from the BaseDataService. See boardIdentifier of Board.
-  // The offer information of this message is valid for the referenced board only.
-  string board_identifier = 1;
+	// mandatory - Identifier for the board used by the supplier. This identifier references a board
+	// entity (boardIdentifier) from the BaseDataService. See boardIdentifier of Board.
+	// The offer information of this message is valid for the referenced board only.
+	string board_identifier = 1;
 
-  // mandatory - A list of offer groups. Each offer group contains multiple arrival dates and LOSs, to which the same
-  // pricing structure applies, as well as the price information itself (in form of references to the price_sets).
-  // Multiple offer groups can be given to represent different arrival date and LOS combinations with different pricing
-  // structures.
-  //
-  // See OfferGroup for more details.
-  repeated OfferGroup offer_groups = 2;
+	// mandatory - A list of offer groups. Each offer group contains multiple arrival dates and LOSs, to which the same
+	// pricing structure applies, as well as the price information itself (in form of references to the price_sets).
+	// Multiple offer groups can be given to represent different arrival date and LOS combinations with different pricing
+	// structures.
+	//
+	// See OfferGroup for more details.
+	repeated OfferGroup offer_groups = 2;
 }
 
 // An OfferGroup represents a group of arrival date and LOS combinations, which all have the same pricing structure, and
@@ -108,10 +108,10 @@ message Board_OfferData {
 //
 // See DateLosGroup and OfferValue for more details.
 message OfferGroup {
-  // mandatory - A list of arrival date and LOS combinations, that the offer value is valid for
-  repeated DateLosGroup date_los_groups = 1;
-  // mandatory - The offer value (including prices), that is valid for the given arrival date and LOS combinations.
-  OfferValue offer = 2;
+	// mandatory - A list of arrival date and LOS combinations, that the offer value is valid for
+	repeated DateLosGroup date_los_groups = 1;
+	// mandatory - The offer value (including prices), that is valid for the given arrival date and LOS combinations.
+	OfferValue offer = 2;
 }
 
 // Identifies a certain set of arrival date and LOS combinations. Can be used to assign an offer value to multiple
@@ -125,10 +125,10 @@ message OfferGroup {
 //   - 01-01-1970+1, 01-01-1970+2, 01-01-1970+5
 //   - 02-01-1970+1, 02-01-1970+2, 02-01-1970+5
 message DateLosGroup {
-  // mandatory - List of arrival dates with which to build the cross product of arrival date and LOS combinations
-  repeated google.type.Date arrival_dates = 1;
-  // mandatory - List of LOSs with which to build the cross product of arrival date and LOS combinations
-  repeated uint32 loses = 2;
+	// mandatory - List of arrival dates with which to build the cross product of arrival date and LOS combinations
+	repeated google.type.Date arrival_dates = 1;
+	// mandatory - List of LOSs with which to build the cross product of arrival date and LOS combinations
+	repeated uint32 loses=2;
 }
 
 // Representation of the "value" of an offer. The value of an offer informs about the final price (and meta information)
@@ -142,42 +142,42 @@ message DateLosGroup {
 // It is not possible to use both "object_price" and "price_set_keys" at the same time, but it is mandatory to use one
 // of them.
 message OfferValue {
-  // optional - Holds a single final price for the offer. One of object_price or price_set_keys must be used.
-  //
-  // It is the easiest form of an offer price. Example: if the object_price is 50 for a given combination of
-  // accommodation, rate, room, board, arrival date and LOS and the currency is set to EUR, that exact offer costs 50€
-  // and no further price calculation is required.
-  double object_price = 3;
-  // optional - Used to represent a complex pricing structure using daily and person specific prices.
-  // One of price_set_keys or object_price must be used.
-  //
-  // Complex prices are given as a list of references to PriceSet entities (see PriceSet). The context of an OfferValue
-  // always contains a map of PriceSet objects (e.g. see Accommodation_OfferData). Each PriceSet in the map has a unique
-  // key. This key is used to reference a price set in the price_set_keys list. Each entry references a price set.
-  //
-  // Multiple price sets can be referenced in order to represent daily prices. Each entry in the list represents the
-  // price for a single day of a stay, whereby a price itself is again a complex price structure to allow person prices
-  // (see PriceSet). The position of a price set in the list denotes which day of the stay a price is valid for. The
-  // first entry in the list denotes a base price, that is applied to the whole travel. The following entries denote the
-  // price for each consecutive day of the stay, starting with the first.
-  // Price sets can also be referenced multiple times. Example:
-  // - Position 0: PriceSet A -> Base price
-  // - Position 1: PriceSet B -> Day 1
-  // - Position 2: PriceSet B -> Day 2
-  // - Position 3: PriceSet C -> Day 3
-  // - Position 4: PriceSet D -> Day 4
-  //
-  // In order to calculate the final price for a stay, the length of stay has to be considered. Given a length of stay
-  // of x, the price sets from 0 to x have to be summed up, e.g. for LOS 3 sum up positions 0,1,2,3 of the list
-  // (PriceSet A + 2*PriceSet B + PriceSet C).
-  // This logic allows for an OfferValue to be valid for multiple different lengths of stay. E.g. given the same
-  // OfferValue for LOSs 1-5, you can calculate 5 different offers (LOSs 1,2,3,4,5) using this single OfferValue object
-  // and summing up the price sets up to different lengths of the list.
-  //
-  // See PriceSet for how to calculate the price of a single price set.
-  repeated uint32 price_set_keys = 2;
-  // optional - List of DRV GlobalTypes marking meta information about an offer
-  repeated GlobalType global_types = 1;
+	// optional - Holds a single final price for the offer. One of object_price or price_set_keys must be used.
+	//
+	// It is the easiest form of an offer price. Example: if the object_price is 50 for a given combination of
+	// accommodation, rate, room, board, arrival date and LOS and the currency is set to EUR, that exact offer costs 50€
+	// and no further price calculation is required.
+	double object_price = 3;
+	// optional - Used to represent a complex pricing structure using daily and person specific prices.
+	// One of price_set_keys or object_price must be used.
+	//
+	// Complex prices are given as a list of references to PriceSet entities (see PriceSet). The context of an OfferValue
+	// always contains a map of PriceSet objects (e.g. see Accommodation_OfferData). Each PriceSet in the map has a unique
+	// key. This key is used to reference a price set in the price_set_keys list. Each entry references a price set.
+	//
+	// Multiple price sets can be referenced in order to represent daily prices. Each entry in the list represents the
+	// price for a single day of a stay, whereby a price itself is again a complex price structure to allow person prices
+	// (see PriceSet). The position of a price set in the list denotes which day of the stay a price is valid for. The
+	// first entry in the list denotes a base price, that is applied to the whole travel. The following entries denote the
+	// price for each consecutive day of the stay, starting with the first.
+	// Price sets can also be referenced multiple times. Example:
+	// - Position 0: PriceSet A -> Base price
+	// - Position 1: PriceSet B -> Day 1
+	// - Position 2: PriceSet B -> Day 2
+	// - Position 3: PriceSet C -> Day 3
+	// - Position 4: PriceSet D -> Day 4
+	//
+	// In order to calculate the final price for a stay, the length of stay has to be considered. Given a length of stay
+	// of x, the price sets from 0 to x have to be summed up, e.g. for LOS 3 sum up positions 0,1,2,3 of the list
+	// (PriceSet A + 2*PriceSet B + PriceSet C).
+	// This logic allows for an OfferValue to be valid for multiple different lengths of stay. E.g. given the same
+	// OfferValue for LOSs 1-5, you can calculate 5 different offers (LOSs 1,2,3,4,5) using this single OfferValue object
+	// and summing up the price sets up to different lengths of the list.
+	//
+	// See PriceSet for how to calculate the price of a single price set.
+	repeated uint32 price_set_keys = 2;
+	// optional - List of DRV GlobalTypes marking meta information about an offer
+	repeated GlobalType global_types = 1;
 }
 
 // Represents a complex price structure composed out of an object price and person prices used as part of a complete
@@ -187,48 +187,48 @@ message OfferValue {
 // In order to calculate the total price of a PriceSet, it is necessary to sum up the object price and all PersonPrices,
 // that apply to the given persons.
 message PriceSet {
-  // optional - Object price component of the price set (if not given then there must be person prices defined). The
-  // object price is valid for the whole object (accommodation/room/board) independent from which kind of persons
-  // are traveling.
-  double object_price = 1;
-  // optional - List of person prices, that have to be applied (if not given then there must be an object price defined).
-  // For a given set of travelling persons with concrete ages, that an offer is searched for, all person prices have to
-  // be applied to the set of persons. For each travelling person, all applying person prices have to be summed up to
-  // calculate the total amount of person prices. For whether a PersonPrice applies to a person, see PersonPrice.
-  repeated PersonPrice person_prices = 2;
+	// optional - Object price component of the price set (if not given then there must be person prices defined). The
+	// object price is valid for the whole object (accommodation/room/board) independent from which kind of persons
+	// are traveling.
+	double object_price = 1;
+	// optional - List of person prices, that have to be applied (if not given then there must be an object price defined).
+	// For a given set of travelling persons with concrete ages, that an offer is searched for, all person prices have to
+	// be applied to the set of persons. For each travelling person, all applying person prices have to be summed up to
+	// calculate the total amount of person prices. For whether a PersonPrice applies to a person, see PersonPrice.
+	repeated PersonPrice person_prices = 2;
 }
 
 // Representation of a price, that is valid for a certain set of persons, i.e. persons matching certain criteria.
 message PersonPrice {
-  // optional - default: 0 - The price, that applies to the set of persons given by the person filters.
-  double person_price = 1;
-  // optional - List of person filters, which constitutes the set of persons, that the given price is applied to. The
-  // PersonPrice applies to a given person, if at least 1 of the PersonFilter entries applies to the person. See
-  // PersonFilter on when a PersonFilter applies to a person.
-  // If not given, the price is valid for all persons.
-  repeated PersonFilter person_filters = 2;
+	// optional - default: 0 - The price, that applies to the set of persons given by the person filters.
+	double person_price = 1;
+	// optional - List of person filters, which constitutes the set of persons, that the given price is applied to. The
+	// PersonPrice applies to a given person, if at least 1 of the PersonFilter entries applies to the person. See
+	// PersonFilter on when a PersonFilter applies to a person.
+	// If not given, the price is valid for all persons.
+	repeated PersonFilter person_filters = 2;
 }
 
 // Represents a set of persons by filtering persons by age ranges and pax count. It is used to to specify which
 // person(s) a price is applicable for.
 message PersonFilter {
-  // optional - A list of age ranges. The PersonFilter applies to a person, if the person is in at least one of the
-  // given age ranges and the pax_count_range matches. If not given, the PersonFilter is valid for all ages.
-  repeated AgeRange age_ranges = 1;
-  // optional - A list of pax count ranges. A Pax count denotes the position of a person within the age ranges given in
-  // age_ranges, e.g. pax count = 3 => "The third person in the given age range". The PersonFilter applies to a person,
-  // if the pax count of the person in the given age ranges is within at least one of the given PaxCountRanges.
-  // If not given, the PersonFilter is valid for all pax counts.
-  repeated PaxCountRange pax_count_range = 2;
+	// optional - A list of age ranges. The PersonFilter applies to a person, if the person is in at least one of the
+	// given age ranges and the pax_count_range matches. If not given, the PersonFilter is valid for all ages.
+	repeated AgeRange age_ranges = 1;
+	// optional - A list of pax count ranges. A Pax count denotes the position of a person within the age ranges given in
+	// age_ranges, e.g. pax count = 3 => "The third person in the given age range". The PersonFilter applies to a person,
+	// if the pax count of the person in the given age ranges is within at least one of the given PaxCountRanges.
+	// If not given, the PersonFilter is valid for all pax counts.
+	repeated PaxCountRange pax_count_range = 2;
 }
 
 // Represents an age range, i.e. an age of a person between a minimum and maximum age. The range is closed, i.e. both
 // values are inclusive. Used e.g. in a PersonFilter to indicate a certain set of persons with certain age constraints.
 message AgeRange {
-  // optional - default: 1 - The lower bound (closed) of the given age range.
-  int32 min_age = 1;
-  // optional - default: 255 - The upper bound (closed) of the given age range.
-  int32 max_age = 2;
+	// optional - default: 1 - The lower bound (closed) of the given age range.
+	int32 min_age = 1;
+	// optional - default: 255 - The upper bound (closed) of the given age range.
+	int32 max_age = 2;
 }
 
 // Represents a pax count range, i.e. a pax count of a person between a minimum and maximum pax count. A Pax count
@@ -238,9 +238,9 @@ message AgeRange {
 // The range is closed, i.e. both values are inclusive. Used e.g. in a PersonFilter to indicate a certain set of persons
 // with certain pax count constraints.
 message PaxCountRange {
-  // optional - default: 1 - The lower bound (closed) of the given pax count range.
-  int32 min_count = 1; //optional - Default: 1
-  // optional - default: 15 - The upper bound (closed) of the given pax count range.
-  int32 max_count = 2;
+	// optional - default: 1 - The lower bound (closed) of the given pax count range.
+	int32 min_count = 1; //optional - Default: 1
+	// optional - default: 15 - The upper bound (closed) of the given pax count range.
+	int32 max_count = 2;
 }
 
